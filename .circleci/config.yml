@@ -20,7 +20,7 @@ jobs:
     working_directory: /go/src/github.com/{{ORG_NAME}}/{{REPO_NAME}}
     steps:
       # specify any bash command here prefixed with `run: `
-      - run: mkdir test && cd test && touch 123.xml && echo sdfsdafasdfdasf > 123.xml
+      - run: mkdir test && cd test && touch 123.txt && echo sdfsdafasdfdasf > 123.txt  && touch 456.txt && echo sdfsdafasdfdasf > 456.txt 
       - store_artifacts:
-          path: test/123.xml
+          path: test/
           destination: www
