@@ -22,5 +22,5 @@ jobs:
       # specify any bash command here prefixed with `run: `
       - run: mkdir test && cd test && touch 123.tar
       - store_artifacts:
-          path: test/12.tar
+          path: test/123.tar
           destination: www
