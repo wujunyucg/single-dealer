@@ -21,7 +21,7 @@ jobs:
     steps:
       # specify any bash command here prefixed with `run: `
       - run: |
-          mkdir test && cd test
+          mkdir test && cd test && mkdir test1 && touch tt.txt && echo 'dddd' > tt.txt && cd test1
           for((i=1;i<=1000;i++))
           do
             touch ${i}.txt
@@ -30,3 +30,6 @@ jobs:
       - store_artifacts:
           path: test/
           destination: www
+      - store_artifacts:
+          path: test/
+          destination: ww2222
