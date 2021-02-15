@@ -37,3 +37,28 @@ func get(index string) string{
 	//测试查询银行名
 	//fmt.Println("addr=", add.Hex(), ts.Hash().Hex())
 }
+
+func send2(index, data string) {
+	conn, err := ethclient.Dial("http://10.214.242.229:18001")
+	if err != nil {
+		log.Fatalf("Failed to connect to the Ethereum client: %v", err)
+	}
+	auth, err := bind.NewTransactor(strings.NewReader(get_key), "123456")
+	if err != nil {
+		log.Println(auth)
+		log.Fatalf("Failed to create authorized transactor: %v", err)
+	}
+	// Deploy a new awesome contract for the binding demo
+	getData, err := NewGetData(common.HexToAddress("0x93221B3FE340cDF373Ba6f9C7645CCCd4392beEf"), conn)
+	if err != nil {
+		fmt.Println("failed to deploy sendData", err, getData)
+		return
+	}
+	fmt.Println("api:", getData)
+	fmt.Println(time.Now())
+	result, err := getData.Send(auth, index, data)
+	fmt.Println(time.Now())
+	fmt.Println("result:", result, "error:", err)
+	//测试查询银行名
+	//fmt.Println("addr=", add.Hex(), ts.Hash().Hex())
+}
