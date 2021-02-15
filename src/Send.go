@@ -33,7 +33,7 @@ const key = `
     "version": 3
 }
 `
-func send(){
+func send(index , data string){
 	conn, err := ethclient.Dial("http://10.214.242.228:18001")
 	if err != nil {
 		log.Fatalf("Failed to connect to the Ethereum client: %v", err)
@@ -50,7 +50,7 @@ func send(){
 	}
 	fmt.Println("api:", sendData)
 	fmt.Println(time.Now())
-	result, err := sendData.Send(auth, "12", "12345")
+	result, err := sendData.Send(auth, index, data)
 	ctx := context.Background()
 	addressAfterMined, err :=bind.WaitMined(ctx, conn, result)
 	fmt.Println(addressAfterMined)
