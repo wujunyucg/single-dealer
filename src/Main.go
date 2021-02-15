@@ -17,6 +17,6 @@ func hello(w http.ResponseWriter, req *http.Request) {
 }
 
 func sendData(w http.ResponseWriter, req *http.Request) {
-
+	send()
 	fmt.Fprintf(w, "hello\n")
 }
