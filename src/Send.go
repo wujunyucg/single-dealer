@@ -43,7 +43,7 @@ func send(index , data string){
 		log.Fatalf("Failed to create authorized transactor: %v", err)
 	}
 	// Deploy a new awesome contract for the binding demo
-	sendData, err := NewSendData(common.HexToAddress("0xa5aF7451d2d853FFB3be137131Fb343Dda286240"), conn)
+	sendData, err := NewSendData(common.HexToAddress("0xB9b84C3429D930d8A95Bee7D8DD503Efd6Cb8B9d"), conn)
 	if err != nil {
 		fmt.Println("failed to deploy sendData", err, sendData)
 		return
