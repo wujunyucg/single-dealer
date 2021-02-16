@@ -32,7 +32,7 @@ func sendData(w http.ResponseWriter, req *http.Request) {
 		}
 	}
 	send(index, data)
-	fmt.Fprintf(w, "hello\n")
+	fmt.Fprintf(w, "123")
 }
 
 func sendData2(w http.ResponseWriter, req *http.Request) {
@@ -48,7 +48,7 @@ func sendData2(w http.ResponseWriter, req *http.Request) {
 		}
 	}
 	send2(index, data)
-	fmt.Fprintf(w, "hello\n")
+	fmt.Fprintf(w, "123")
 }
 
 func getData(w http.ResponseWriter, req *http.Request) {
