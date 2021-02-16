@@ -52,11 +52,12 @@ func sendData2(w http.ResponseWriter, req *http.Request) {
 }
 
 func getData(w http.ResponseWriter, req *http.Request) {
+	var data string
 	for k, v := range req.URL.Query() {
 		fmt.Printf("%s: %s\n", k, v)
 		if k == "index" {
-			get(v[0])
+			data = get(v[0])
 		}
 	}
-	fmt.Fprintf(w, "hello\n")
+	fmt.Fprintf(w, data)
 }
