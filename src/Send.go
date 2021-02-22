@@ -1,7 +1,6 @@
 package main;
 
 import (
-	"context"
 	"fmt"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
@@ -51,9 +50,9 @@ func send(index , data string){
 	fmt.Println("api:", sendData)
 	fmt.Println(time.Now())
 	result, err := sendData.Send(auth, index, data)
-	ctx := context.Background()
-	addressAfterMined, err :=bind.WaitMined(ctx, conn, result)
-	fmt.Println(addressAfterMined)
+	//ctx := context.Background()
+	//addressAfterMined, err :=bind.WaitMined(ctx, conn, result)
+	//fmt.Println(addressAfterMined)
 	fmt.Println(time.Now())
 	fmt.Println("result:", result, "error:", err)
 	//测试查询银行名
