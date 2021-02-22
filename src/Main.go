@@ -3,10 +3,11 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"runtime"
 )
 
 func main() {
-
+	runtime.GOMAXPROCS(1)
 	http.HandleFunc("/hello", hello)
 	http.HandleFunc("/sendData", sendData)
 	http.HandleFunc("/sendData2", sendData2)
