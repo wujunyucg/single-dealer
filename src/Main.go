@@ -3,62 +3,46 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"runtime"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 func main() {
-	runtime.GOMAXPROCS(1)
-	http.HandleFunc("/hello", hello)
+	e := echo.New()
+
+	// Middleware
+	e.Use(middleware.Logger())
+	e.Use(middleware.Recover())
+	e.GET("/hello", hello)
 	http.HandleFunc("/sendData", sendData)
 	http.HandleFunc("/sendData2", sendData2)
 	http.HandleFunc("/getData", getData)
-	http.ListenAndServe(":8090", nil)
-}
-func hello(w http.ResponseWriter, req *http.Request) {
-
-
-	fmt.Fprintf(w, "hello\n")
+	e.Logger.Fatal(e.Start(":8090"))
 }
 
-func sendData(w http.ResponseWriter, req *http.Request) {
-	var index, data string
-	for k, v := range req.URL.Query() {
-		fmt.Printf("%s: %s\n", k, v)
-		if k == "index" {
-			index = v[0]
-		}
+func hello(c echo.Context) error {
+	return c.String(http.StatusOK, "Hello, World!")
+}
 
-		if k == "data" {
-			data = v[0]
-		}
-	}
+func sendData(c echo.Context) error {
+	index := c.Param("index")
+	data := c.Param("data")
+	fmt.Println("sendData -- " + index + ":" + data)
 	send(index, data)
-	fmt.Fprintf(w, "123")
+	return c.String(http.StatusOK, "Hello, World!")
 }
 
-func sendData2(w http.ResponseWriter, req *http.Request) {
-	var index, data string
-	for k, v := range req.URL.Query() {
-		fmt.Printf("%s: %s\n", k, v)
-		if k == "index" {
-			index = v[0]
-		}
-
-		if k == "data" {
-			data = v[0]
-		}
-	}
+func sendData2(c echo.Context) error {
+	index := c.Param("index")
+	data := c.Param("data")
+	fmt.Println("sendData2 -- " + index + ":" + data)
 	send2(index, data)
-	fmt.Fprintf(w, "123")
+	return c.String(http.StatusOK, "Hello, World!")
 }
 
-func getData(w http.ResponseWriter, req *http.Request) {
-	var data string
-	for k, v := range req.URL.Query() {
-		fmt.Printf("%s: %s\n", k, v)
-		if k == "index" {
-			data = get(v[0])
-		}
-	}
-	fmt.Fprintf(w, data)
+func getData(c echo.Context) error {
+	index := c.Param("index")
+	data := get(index)
+	fmt.Println("getData -- " + index + ":" + data)
+	return c.String(http.StatusOK, data)
 }
