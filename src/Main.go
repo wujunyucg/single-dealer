@@ -25,23 +25,23 @@ func hello(c echo.Context) error {
 }
 
 func sendData(c echo.Context) error {
-	index := c.Param("index")
-	data := c.Param("data")
+	index := c.FormValue("index")
+	data := c.FormValue("data")
 	fmt.Println("sendData -- " + index + ":" + data)
 	send(index, data)
 	return c.String(http.StatusOK, "Hello, World!")
 }
 
 func sendData2(c echo.Context) error {
-	index := c.Param("index")
-	data := c.Param("data")
+	index := c.FormValue("index")
+	data := c.FormValue("data")
 	fmt.Println("sendData2 -- " + index + ":" + data)
 	send2(index, data)
 	return c.String(http.StatusOK, "Hello, World!")
 }
 
 func getData(c echo.Context) error {
-	index := c.Param("index")
+	index := c.FormValue("index")
 	data := get(index)
 	fmt.Println("getData -- " + index + ":" + data)
 	return c.String(http.StatusOK, data)
