@@ -14,9 +14,9 @@ func main() {
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 	e.GET("/hello", hello)
-	http.HandleFunc("/sendData", sendData)
-	http.HandleFunc("/sendData2", sendData2)
-	http.HandleFunc("/getData", getData)
+	e.GET("/sendData", sendData)
+	e.GET("/sendData2", sendData2)
+	e.GET("/getData", getData)
 	e.Logger.Fatal(e.Start(":8090"))
 }
 
