@@ -6,7 +6,9 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"log"
+	"math/big"
 	"strings"
+	"sync"
 	"time"
 )
 const key = `
@@ -32,6 +34,9 @@ const key = `
     "version": 3
 }
 `
+
+var send1Nonce = big.NewInt(76)
+var send1Mux sync.Mutex
 func send(index , data string){
 	conn, err := ethclient.Dial("http://10.214.242.228:18001")
 	if err != nil {
@@ -42,12 +47,17 @@ func send(index , data string){
 		log.Fatalf("Failed to create authorized transactor: %v", err)
 	}
 	// Deploy a new awesome contract for the binding demo
-	sendData, err := NewSendData(common.HexToAddress("0xFb52e0D423c755d6E9a80c17DD5A3BB19351d975"), conn)
+	sendData, err := NewSendData(common.HexToAddress("0x57fF16E55c4BC231236bE9A9D11F931B9dD0DE1F"), conn)
 	if err != nil {
 		fmt.Println("failed to deploy sendData", err, sendData)
 		return
 	}
 	fmt.Println("api:", sendData)
+
+	send1Mux.Lock()
+	send1Nonce = send1Nonce.Add(send1Nonce, big.NewInt(1))
+	auth.Nonce = send1Nonce
+	send1Mux.Unlock()
 	fmt.Println(time.Now())
 	result, err := sendData.Send(auth, index, data)
 	//ctx := context.Background()
