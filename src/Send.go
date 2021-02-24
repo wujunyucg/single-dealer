@@ -6,9 +6,7 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"log"
-	"math/big"
 	"strings"
-	"sync"
 	"time"
 )
 const key = `
@@ -35,8 +33,6 @@ const key = `
 }
 `
 
-var send1Nonce = big.NewInt(75)
-var send1Mux sync.Mutex
 func send(index , data string){
 	conn, err := ethclient.Dial("http://10.214.242.228:18001")
 	if err != nil {
@@ -53,18 +49,19 @@ func send(index , data string){
 		return
 	}
 	fmt.Println("api:", sendData)
+	for true {
+		result, err := sendData.Send(auth, index, data)
+		//ctx := context.Background()
+		//addressAfterMined, err :=bind.WaitMined(ctx, conn, result)
+		//fmt.Println(addressAfterMined)
+		if err != nil {
+			fmt.Println("result:", result, "error:", err)
+			time.Sleep(time.Second)
+			continue
+		}
+		break
+	}
 
-	send1Mux.Lock()
-	send1Nonce = send1Nonce.Add(send1Nonce, big.NewInt(1))
-	//auth.Nonce = send1Nonce
-	send1Mux.Unlock()
-	fmt.Println(time.Now())
-	result, err := sendData.Send(auth, index, data)
-	//ctx := context.Background()
-	//addressAfterMined, err :=bind.WaitMined(ctx, conn, result)
-	//fmt.Println(addressAfterMined)
-	fmt.Println(time.Now())
-	fmt.Println("result:", result, "error:", err)
 	//测试查询银行名
 	//fmt.Println("addr=", add.Hex(), ts.Hash().Hex())
 }
