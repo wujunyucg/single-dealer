@@ -61,7 +61,7 @@ func send2(index, data string) {
 	fmt.Println("api:", getData)
 	send2Mux.Lock()
 	send2Nonce = send2Nonce.Add(send2Nonce, big.NewInt(1))
-	auth.Nonce = send1Nonce
+	//auth.Nonce = send1Nonce
 	send2Mux.Unlock()
 	fmt.Println(time.Now())
 	result, err := getData.Send(auth, index, data)

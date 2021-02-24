@@ -35,7 +35,7 @@ const key = `
 }
 `
 
-var send1Nonce = big.NewInt(76)
+var send1Nonce = big.NewInt(75)
 var send1Mux sync.Mutex
 func send(index , data string){
 	conn, err := ethclient.Dial("http://10.214.242.228:18001")
@@ -56,7 +56,7 @@ func send(index , data string){
 
 	send1Mux.Lock()
 	send1Nonce = send1Nonce.Add(send1Nonce, big.NewInt(1))
-	auth.Nonce = send1Nonce
+	//auth.Nonce = send1Nonce
 	send1Mux.Unlock()
 	fmt.Println(time.Now())
 	result, err := sendData.Send(auth, index, data)
