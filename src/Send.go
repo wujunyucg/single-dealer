@@ -1,4 +1,4 @@
-package main;
+package main
 
 import (
 	"fmt"
@@ -7,8 +7,10 @@ import (
 	"github.com/ethereum/go-ethereum/ethclient"
 	"log"
 	"strings"
+	"sync"
 	"time"
 )
+
 const key = `
 {
     "address": "c0eeeeb71b120acd5d63affe33bf54eb583448c5",
@@ -33,7 +35,33 @@ const key = `
 }
 `
 
-func send(index , data string){
+var sendDataContract *SendData
+var authInstance *bind.TransactOpts
+var lock sync.Mutex
+func send(index, data string) {
+	if sendDataContract == nil || authInstance == nil {
+		lock.Lock()
+		if sendDataContract == nil || authInstance == nil {
+			sendDataContract , authInstance = getSendDataContract()
+		}
+		lock.Unlock()
+	}
+	for true {
+		result, err := sendDataContract.Send(authInstance, index, data)
+		//ctx := context.Background()
+		//addressAfterMined, err :=bind.WaitMined(ctx, conn, result)
+		//fmt.Println(addressAfterMined)
+		if err != nil {
+			log.Println("result:", result, "error:", err)
+			time.Sleep(time.Second)
+			continue
+		}
+		break
+	}
+
+}
+
+func getSendDataContract() (*SendData, *bind.TransactOpts) {
 	conn, err := ethclient.Dial("http://10.214.242.228:18001")
 	if err != nil {
 		log.Fatalf("Failed to connect to the Ethereum client: %v", err)
@@ -45,23 +73,9 @@ func send(index , data string){
 	// Deploy a new awesome contract for the binding demo
 	sendData, err := NewSendData(common.HexToAddress("0x57fF16E55c4BC231236bE9A9D11F931B9dD0DE1F"), conn)
 	if err != nil {
-		fmt.Println("failed to deploy sendData", err, sendData)
-		return
+		log.Println("failed to deploy sendData", err, sendData)
+		return nil, nil
 	}
 	fmt.Println("api:", sendData)
-	for true {
-		result, err := sendData.Send(auth, index, data)
-		//ctx := context.Background()
-		//addressAfterMined, err :=bind.WaitMined(ctx, conn, result)
-		//fmt.Println(addressAfterMined)
-		if err != nil {
-			fmt.Println("result:", result, "error:", err)
-			time.Sleep(time.Second)
-			continue
-		}
-		break
-	}
-
-	//测试查询银行名
-	//fmt.Println("addr=", add.Hex(), ts.Hash().Hex())
+	return sendData, auth
 }
